@@ -1,10 +1,10 @@
 import { useEffect, useState } from "react";
-import { useSelector, useDispatch } from "react-redux";
+import { useSelector } from "react-redux";
 import storage from "local-storage-fallback";
 
 //? Themes
 import { ThemeProvider } from "styled-components";
-import { selectTheme, changeTheme } from "../app/features/themeSlice";
+import { selectTheme } from "../app/features/themeSlice";
 import { LightTheme, DarkTheme } from "../styles/Themes";
 
 const themes = {
@@ -13,7 +13,6 @@ const themes = {
 };
 
 function App({ children }) {
-  const dispatch = useDispatch();
   const globalTheme = useSelector(selectTheme);
 
   const [theme, setTheme] = useState(globalTheme);
@@ -23,20 +22,7 @@ function App({ children }) {
     storage.setItem("theme", JSON.stringify(globalTheme));
   }, [globalTheme]);
 
-  return (
-    <ThemeProvider theme={themes[theme]}>
-      <button
-        onClick={() => {
-          globalTheme === "light"
-            ? dispatch(changeTheme({ theme: "dark" }))
-            : dispatch(changeTheme({ theme: "light" }));
-        }}
-      >
-        Change Theme
-      </button>
-      {children}
-    </ThemeProvider>
-  );
+  return <ThemeProvider theme={themes[theme]}>{children}</ThemeProvider>;
 }
 
 export default App;

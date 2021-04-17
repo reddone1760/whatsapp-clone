@@ -16,8 +16,12 @@ import TextField from "@material-ui/core/TextField";
 import Autocomplete from "@material-ui/lab/Autocomplete";
 import parse from "autosuggest-highlight/parse/index";
 import match from "autosuggest-highlight/match/index";
+import { selectTheme, changeTheme } from "../app/features/themeSlice";
+import { useSelector, useDispatch } from "react-redux";
 
 function Sidebar({ chat, messages }) {
+  const dispatch = useDispatch();
+  const globalTheme = useSelector(selectTheme);
   const [user] = useAuthState(auth);
   const router = useRouter();
   const userChatRef = db
@@ -105,6 +109,17 @@ function Sidebar({ chat, messages }) {
             </MenuItem>
             <MenuItem className="menuItem" onClick={handleClose}>
               Marked
+            </MenuItem>
+            <MenuItem
+              className="menuItem"
+              onClick={() => {
+                globalTheme === "light"
+                  ? dispatch(changeTheme({ theme: "dark" }))
+                  : dispatch(changeTheme({ theme: "light" }));
+                handleClose();
+              }}
+            >
+              Change Theme
             </MenuItem>
             <MenuItem className="menuItem" onClick={handleClose}>
               Settings
